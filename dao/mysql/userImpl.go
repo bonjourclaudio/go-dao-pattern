@@ -5,10 +5,9 @@ import (
 	"github.com/claudioontheweb/go-dao-pattern/models"
 )
 
-type UserImplMysql struct {
+type UserImplMysql struct {}
 
-}
-
+// Create User
 func (dao UserImplMysql) Create(u *models.User) error {
 	query := "INSERT INTO user (first_name, last_name) VALUES(?, ?)"
 	db := getConnection()
@@ -34,6 +33,7 @@ func (dao UserImplMysql) Create(u *models.User) error {
 	return nil
 }
 
+// Get User By Id
 func (dao UserImplMysql) GetById(id int) (models.User, error) {
 	query := "SELECT * FROM user where id = ?"
 	db := getConnection()
@@ -49,12 +49,13 @@ func (dao UserImplMysql) GetById(id int) (models.User, error) {
 	case nil:
 		return user, nil
 	default:
-		panic(err)
+		return models.User{}, err
 	}
 }
 
+// Get All Users
 func (dao UserImplMysql) GetAll() ([]models.User, error) {
-	query := "SELECT id, first_name, last_name FROM user"
+	query := "SELECT * FROM user"
 	users := make([]models.User, 0)
 	db := getConnection()
 	defer db.Close()
@@ -84,11 +85,24 @@ func (dao UserImplMysql) GetAll() ([]models.User, error) {
 	return users, nil
 }
 
-func (dao UserImplMysql) Update(id int) (models.User, error) {
-	var user models.User
-	return user, nil
+// Update User
+func (dao UserImplMysql) Update(u *models.User) error {
+
+	query := "UPDATE user SET first_name = ?, last_name = ? WHERE id = ?"
+	db := getConnection()
+	defer db.Close()
+
+	_, err := db.Exec(query, u.Firstname, u.Lastname, u.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+
 }
 
+// Delete User
 func (dao UserImplMysql) Delete(id int) error {
 	query := "DELETE FROM user where id = ?"
 	db := getConnection()
@@ -98,8 +112,5 @@ func (dao UserImplMysql) Delete(id int) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
-
-
 }
