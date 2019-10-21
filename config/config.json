@@ -1,0 +1,16 @@
+{
+  "PORT": "8080",
+  "DB": {
+    "MYSQL": {
+      "DB_NAME": "godaodb",
+      "DB_USER": "dev",
+      "DB_PASS": "dev",
+      "DB_HOST": "127.0.0.1"
+    },
+    "MONGO": {
+      "DB_NAME": "",
+      "DB_USER": "",
+      "DB_PASS": ""
+    }
+  }
+}
