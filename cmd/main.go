@@ -24,7 +24,6 @@ func main() {
 	 	return
 	 }
 
-
 	// Get All Users
 	users, err := userDao.GetAll()
 	if err != nil {
@@ -40,5 +39,15 @@ func main() {
 		return
 	}
 	fmt.Println(user)
+
+	// Update User
+	// ToDo
+
+	// Delete User
+	err = userDao.Delete(1)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 
 }

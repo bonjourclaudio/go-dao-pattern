@@ -34,12 +34,12 @@ func (dao UserImplMysql) Create(u *models.User) error {
 	return nil
 }
 
-func (dao UserImplMysql) GetById(i int) (models.User, error) {
+func (dao UserImplMysql) GetById(id int) (models.User, error) {
 	query := "SELECT * FROM user where id = ?"
 	db := getConnection()
 	defer db.Close()
 
-	row := db.QueryRow(query, i)
+	row := db.QueryRow(query, id)
 
 	var user models.User
 
@@ -90,5 +90,16 @@ func (dao UserImplMysql) Update(id int) (models.User, error) {
 }
 
 func (dao UserImplMysql) Delete(id int) error {
+	query := "DELETE FROM user where id = ?"
+	db := getConnection()
+	defer db.Close()
+
+	_, err := db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
 	return nil
+
+
 }
