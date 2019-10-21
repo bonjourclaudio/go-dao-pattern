@@ -1,6 +1,9 @@
 package mysql
 
-import "github.com/claudioontheweb/go-dao-pattern/models"
+import (
+	"database/sql"
+	"github.com/claudioontheweb/go-dao-pattern/models"
+)
 
 type UserImplMysql struct {
 
@@ -32,8 +35,22 @@ func (dao UserImplMysql) Create(u *models.User) error {
 }
 
 func (dao UserImplMysql) GetById(i int) (models.User, error) {
+	query := "SELECT * FROM user where id = ?"
+	db := getConnection()
+	defer db.Close()
+
+	row := db.QueryRow(query, i)
+
 	var user models.User
-	return user, nil
+
+	switch err := row.Scan(&user.ID, &user.Firstname, &user.Lastname); err {
+	case sql.ErrNoRows:
+		return models.User{}, sql.ErrNoRows
+	case nil:
+		return user, nil
+	default:
+		panic(err)
+	}
 }
 
 func (dao UserImplMysql) GetAll() ([]models.User, error) {
